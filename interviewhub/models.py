@@ -17,6 +17,10 @@ class Question(models.Model):
     qtype = models.CharField(max_length=16, choices=QUESTION_TYPES, default=OPEN_ENDED)
     tags = models.JSONField(default=list, blank=True)
 
+    options = models.JSONField(default=list, blank=True, help_text="For MCQ: ['A', 'B', ...]")
+    scale_min = models.IntegerField(null=True, blank=True, help_text="For SCALE: lower bound (default 1)")
+    scale_max = models.IntegerField(null=True, blank=True, help_text="For SCALE: upper bound (default 5)")
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
