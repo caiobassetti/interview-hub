@@ -1,12 +1,12 @@
 # InterviewHub (Django Demo)  ![CI](https://github.com/caiobassetti/interview-hub/actions/workflows/ci.yml/badge.svg)
 
 ## Architecture
-Django 5 + DRF expose a JSON API.
-Questions are reusable prompts.
-Interviews (Sessions) are sets of questions owned by a facilitator.
-Submissions are answers (one participant, one question, one session).
-Auth is JWT.
-Writes are auth-guarded.
+Django 5 + DRF expose a JSON API.<br>
+Questions are reusable prompts.<br>
+Interviews (Sessions) are sets of questions owned by a facilitator.<br>
+Submissions are answers (one participant, one question, one session).<br>
+Auth is JWT.<br>
+Writes are auth-guarded.<br>
 
 ## Quickstart
 ```bash
@@ -32,12 +32,12 @@ python manage.py runserver
 - `GET /api/submissions/` → list user submissions
 
 ## Sample cURL
-# Token
+### Token
 curl -s -X POST http://127.0.0.1:8000/api/auth/token/ \
   -H "Content-Type: application/json" \
   -d '{"username":"fiona","password":"fiona_pw"}'
 
-# Create a scale question (use access token from step 1)
+### Create a scale question (use access token from step 1)
 ACCESS="<paste_access_here>"
 curl -s -X POST http://127.0.0.1:8000/api/questions/ \
   -H "Authorization: Bearer $ACCESS" -H "Content-Type: application/json" \
@@ -48,11 +48,9 @@ Logs are JSON via structlog; example line:
 {"event":"submit_answer","level":"info","interview":20,"question":11,"user":"alice","answer":"4","timestamp":"2025-09-23T09:30:00Z"}
 
 ## CI/CD
-GitHub Actions workflow (.github/workflows/ci.yml) runs `ruff` + `pytest` on every push/PR:
-**Current status: passing.**
+GitHub Actions workflow (.github/workflows/ci.yml) runs `ruff` + `pytest` on every push/PR.
 
 ## Repo layout
-
 ```
 interview-hub/
 ├── .github/
