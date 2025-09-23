@@ -5,6 +5,9 @@ from .models import Question, Submission, Interview
 from .serializers import QuestionSerializer, SubmissionSerializer, InterviewSerializer
 from django.db import IntegrityError
 from django.db.models import Q
+import structlog
+
+log = structlog.get_logger(__name__)
 
 
 class WhoAmIView(APIView):
@@ -44,6 +47,14 @@ class QuestionListCreateView(generics.ListCreateAPIView):
 
         return qs
 
+    # Override perform_create to include logger
+    def perform_create(self, serializer):
+        question = serializer.save()
+        log.info("create_question",
+                 question_id=question.id,
+                 title=question.title,
+                 user=self.request.user.username)
+
 class QuestionDetailView(generics.RetrieveAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
@@ -64,10 +75,16 @@ class SubmissionCreateView(generics.CreateAPIView):
     serializer_class = SubmissionSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    # Override perform_create to include logger and to set the candidate as the logged-in user
     def perform_create(self, serializer):
-        # Set the candidate as the logged-in user
         try:
-            serializer.save(candidate=self.request.user)
+            submission = serializer.save(candidate=self.request.user)
+            log.info("create_submission",
+                    submission_id=submission.id,
+                    interview=submission.interview_id,
+                    question=submission.question_id,
+                    user=self.request.user.username,
+                    answer=submission.answer_text)
         except IntegrityError:
             # No unique_together (candidate, interview, question)
             raise serializers.ValidationError(
@@ -85,9 +102,13 @@ class InterviewListCreateView(generics.ListCreateAPIView):
         # Show all interviews
         return Interview.objects.all().order_by("-created_at")
 
+    # Override perform_create to include logger and to set the current user as Owner
     def perform_create(self, serializer):
-        # Owner = current user
-        serializer.save(owner=self.request.user)
+        interview = serializer.save(owner=self.request.user)
+        log.info("create_interview",
+                 interview_id=interview.id,
+                 title=interview.title,
+                 owner=self.request.user.username)
 
 class InterviewDetailView(generics.RetrieveAPIView):
     queryset = Interview.objects.all()

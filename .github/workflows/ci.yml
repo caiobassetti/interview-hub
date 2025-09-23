@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Lint (ruff)
+        run: |
+          source .venv/bin/activate
+          ruff check .
+      - name: Test (pytest)
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.dev
+        run: |
+          source .venv/bin/activate
+          pytest -q
