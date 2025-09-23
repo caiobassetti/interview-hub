@@ -1,13 +1,12 @@
 import pytest
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient
-from interviewhub.models import Question, Interview, Submission
 
 @pytest.mark.django_db
 def test_full_flow_create_interview_submit_answers_summarize():
     # Create users
-    fiona = User.objects.create_user(username="fiona", password="pw", is_staff=True)
-    alice = User.objects.create_user(username="alice", password="pw")
+    User.objects.create_user(username="fiona", password="pw", is_staff=True)
+    User.objects.create_user(username="alice", password="pw")
 
     client = APIClient()
 
