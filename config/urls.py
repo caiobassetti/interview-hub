@@ -16,22 +16,24 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path, include
 from django.http import JsonResponse
-from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView,)
+from django.urls import include, path
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 
 def ping(_request):
     return JsonResponse({"status": "ok", "service": "interviewhub"})
 
+
 urlpatterns = [
     path("admin/", admin.site.urls),
-
     # check
     path("ping/", ping),
-
     # app urls
     path("api/", include("interviewhub.urls")),
-
     # JWT token endpoints (no view code needed)
     path("api/auth/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/auth/refresh/", TokenRefreshView.as_view(), name="token_refresh"),

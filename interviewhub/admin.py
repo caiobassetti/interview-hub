@@ -1,9 +1,11 @@
 from django.contrib import admin
-from .models import Question, Interview, Submission
+
+from .models import Interview, Question, Submission
+
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "qtype","created_at")
+    list_display = ("id", "title", "qtype", "created_at")
     list_filter = ("qtype",)
     search_fields = ("title", "body", "tags")
 

@@ -2,6 +2,7 @@
 import os
 import sys
 
+
 def main():
     # Default to dev settings for local runs; can override via env var.
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.dev")
