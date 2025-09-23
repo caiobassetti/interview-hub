@@ -20,7 +20,7 @@ jobs:
       - name: Lint (ruff)
         run: |
           source .venv/bin/activate
-          ruff check .
+          ruff check --output-format=github .
       - name: Test (pytest)
         env:
           DJANGO_SETTINGS_MODULE: config.settings.dev
